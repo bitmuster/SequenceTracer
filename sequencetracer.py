@@ -21,7 +21,10 @@ import sample_code
 
 stack=[]
 FILENAME="output.sdiag"
+
+# Make functions appear as separated objects
 SEPARATE_FUNCTION_CALLS=True
+
 list_of_functions=[]
 myfile=None
 diag=None
@@ -77,10 +80,11 @@ def globaltrace(frame, event, arg):
                 list_of_functions.append(classname + '_' +name)
 
     print( "globaltrace", event, filename, line, classname, objectid, name, '::', code)
+
     if event=="call":
         if stack:
             diag.append( "    " + stack[-1][0] + " -> ")
-            if SEPARATE_FUNCTION_CALLS:
+            if SEPARATE_FUNCTION_CALLS and not "self" in frame.f_locals:
                 stack.append((classname + '_' +name, name))
             else:
                 stack.append((classname, name))
