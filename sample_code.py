@@ -11,7 +11,7 @@ def delta():
 class Beta:
     def __init__(self):
         print('beta init')
-        alpha()
+
     def charlie(self):
         print('charlie')
         delta()
@@ -28,6 +28,8 @@ def main():
     echo.charlie()
     foxtrott=Foxtrott()
     foxtrott.charlie()
+
+alpha()
 
 if __name__== "__main__":
     # does not work as the name is sample_code when called from sequence tracer

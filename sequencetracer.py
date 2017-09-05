@@ -21,7 +21,20 @@ import sample_code
 
 stack=[]
 FILENAME="output.sdiag"
+SEPARATE_FUNCTION_CALLS=True
+list_of_functions=[]
 myfile=None
+diag=None
+
+class Diagram:
+    def __init__(self):
+        self.content=[]
+
+    def append(self, line):
+        self.content.append(line)
+
+    def getcontent(self):
+        return self.content
 
 def localtracer(frame, event, arg):
     #print (event)
@@ -31,7 +44,7 @@ def localtracer(frame, event, arg):
     code=linecache.getline(filename, line)
     if event == "return":
         if len(stack)>=2:
-            myfile.write( "    " + stack[-2][0] + " <-- " + stack[-1][0] + ";\n")
+            diag.append( "    " + stack[-2][0] + " <-- " + stack[-1][0] + ";\n")
         del stack[-1]
     print( "localtrace", event, filename, line, '::',  code)
 
@@ -56,13 +69,23 @@ def globaltrace(frame, event, arg):
         objectid='_id_' + hex(id( frame.f_locals["self"]))
         classname += objectid
     else:
-        classname='Class_'+'none'
+        classname='None'
+        if SEPARATE_FUNCTION_CALLS:
+            if name == '<module>': # wtf
+                list_of_functions.append(classname)
+            else:
+                list_of_functions.append(classname + '_' +name)
+
     print( "globaltrace", event, filename, line, classname, objectid, name, '::', code)
     if event=="call":
         if stack:
-            myfile.write( "    " + stack[-1][0] + " -> ")
-            stack.append((classname,name))
-            myfile.write( stack[-1][0] + " [label = \"" +stack[-1][1] + "\"];\n")
+            diag.append( "    " + stack[-1][0] + " -> ")
+            if SEPARATE_FUNCTION_CALLS:
+                stack.append((classname + '_' +name, name))
+            else:
+                stack.append((classname, name))
+
+            diag.append( stack[-1][0] + " [label = \"" +stack[-1][1] + "\"];\n")
         else:
             stack.append((classname,name))
 
@@ -72,16 +95,27 @@ def globaltrace(frame, event, arg):
 
 
 def main():
-    global myfile
-    myfile=open(FILENAME, 'w')
+    global diag
+    diag=Diagram()
     sys.settrace(globaltrace)
-
-    myfile.write("seqdiag {\n")
 
     exec(cmd)
 
     # disable tracing, otherwise we cannot close the file
     sys.settrace(None)
+
+    global myfile
+    myfile=open(FILENAME, 'w')
+    myfile.write("seqdiag {\n")
+
+    if SEPARATE_FUNCTION_CALLS:
+        for function in list_of_functions:
+            myfile.write(function+';')
+        myfile.write('\n')
+
+    for c in diag.getcontent():
+        myfile.write(c)
+
     myfile.write("}\n")
     myfile.close()
 
