@@ -107,6 +107,8 @@ def main():
     global myfile
     myfile=open(FILENAME, 'w')
     myfile.write("seqdiag {\n")
+    myfile.write("    edge_length = 140;\n")  # default value is 192
+    myfile.write("    span_height = 5;\n")  # default value is 40
 
     if SEPARATE_FUNCTION_CALLS:
         for function in list_of_functions:
