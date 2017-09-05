@@ -3,7 +3,7 @@
 def alpha():
     print('alpha')
     pass
-    
+
 def delta():
     print('delta')
     pass
@@ -16,12 +16,18 @@ class Beta:
         print('charlie')
         delta()
 
+class Foxtrott ( Beta ):
+    pass
 
 def main():
     print('main')
     alpha()
     beta=Beta()
     beta.charlie()
+    echo=Beta()
+    echo.charlie()
+    foxtrott=Foxtrott()
+    foxtrott.charlie()
 
 if __name__== "__main__":
     # does not work as the name is sample_code when called from sequence tracer

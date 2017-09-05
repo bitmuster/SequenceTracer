@@ -17,10 +17,15 @@ As debian packet: python3-seqdiag
 - Add model class for sequences than export from there
 - Add test file
 - Add Makefile with tests linters runs etc
-- Also read Object names
+- Also derive object's code names (is it possible?)
 - Find a real-life example
 - Add filter to filter unwanted objects
 - Add trick to filter sys & os calls that are handled in C (e.g. os.system)
 - Clone output to file instead of console
+- Add license info
+- Any way to debug??? We cannot trace and debug at the same time!
+  - Can we test this nicely ?
+- 
+
 
 
