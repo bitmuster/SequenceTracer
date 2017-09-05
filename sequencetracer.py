@@ -21,6 +21,8 @@ sys.path.append(scipt_path)
 import sample_code
 
 stack=[]
+FILENAME="output.sdiag"
+myfile=None
 
 def localtracer(frame, event, arg):
     #print (event)
@@ -30,7 +32,7 @@ def localtracer(frame, event, arg):
     code=linecache.getline(filename, line)
     if event == "return":
         if len(stack)>=2:
-            print( "    " + stack[-2][0] + " <-- " + stack[-1][0] + ";")
+            myfile.write( "    " + stack[-2][0] + " <-- " + stack[-1][0] + ";\n")
         del stack[-1]
     #print( "local ", event, filename, line, code)
 
@@ -48,9 +50,9 @@ def globaltrace(frame, event, arg):
     #print( "global", event, filename, line, classname, name, code)
     if event=="call":
         if stack:
-            print( "    " + stack[-1][0] + " -> ", end="" )
+            myfile.write( "    " + stack[-1][0] + " -> ")
             stack.append((classname,name))
-            print( stack[-1][0] + " [label = \"" +stack[-1][1] + "\"];")
+            myfile.write( stack[-1][0] + " [label = \"" +stack[-1][1] + "\"];\n")
         else:
             stack.append((classname,name))
 
@@ -59,11 +61,16 @@ def globaltrace(frame, event, arg):
 
 
 
+def main():
+    global myfile
+    myfile=open(FILENAME, 'w')
+    sys.settrace(globaltrace)
 
-sys.settrace(globaltrace)
+    myfile.write("seqdiag {\n")
+    
+    exec(cmd )
 
-print("seqdiag {")
+    myfile.write("}\n")
+    myfile.close()
 
-exec(cmd )
-
-print("}")
+main()
