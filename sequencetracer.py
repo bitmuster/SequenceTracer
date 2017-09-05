@@ -1,3 +1,4 @@
+#! /usr/bin/python3
 
 # 
 # This work was inspired by Zooko O'Whielacronx's trace.py
@@ -8,10 +9,16 @@
 import sys
 import linecache
 
-p="/home/micha/Dump/CodeLand/AnyMate"
+scipt_path = "/home/micha/Dump/CodeLand/AnyMate"
+cmd = "AnyMate.main( ['AnyMate.py', '--nogui', 'greet', '../AnyMate/template.anymate'] ) "
 
-sys.path.append(p)
-import AnyMate
+scipt_path = "./"
+cmd = "sample_code.main()"
+
+sys.path.append(scipt_path)
+
+#import AnyMate
+import sample_code
 
 stack=[]
 
@@ -50,7 +57,7 @@ def globaltrace(frame, event, arg):
     #print(stack)
     return localtracer
 
-cmd = "AnyMate.main( ['AnyMate.py', '--nogui', 'greet', '../AnyMate/template.anymate'] ) "
+
 
 
 sys.settrace(globaltrace)
