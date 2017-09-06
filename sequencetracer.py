@@ -8,16 +8,20 @@ import sys
 import linecache
 import os, os.path
 
-scipt_path = "/home/micha/Dump/CodeLand/AnyMate"
-cmd = "AnyMate.main( ['AnyMate.py', '--nogui', 'greet', '../AnyMate/template.anymate'] ) "
+if False:
+    scipt_path = "/home/micha/Dump/CodeLand/AnyMate"
+    cmd = "AnyMate.main( ['AnyMate.py', '--nogui', 'greet', '../AnyMate/template.anymate'] ) "
+    sys.path.append(scipt_path)
+    import AnyMate
 
-scipt_path = "./"
-cmd = "sample_code.main()"
+if True:
+    scipt_path = "./"
+    cmd = "sample_code.main()"
+    import sample_code
+    sys.path.append(scipt_path)
 
-sys.path.append(scipt_path)
 
-#import AnyMate
-import sample_code
+
 
 stack=[]
 FILENAME="output.sdiag"
