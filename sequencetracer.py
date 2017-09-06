@@ -24,6 +24,7 @@ FILENAME="output.sdiag"
 
 # Make functions appear as separated objects
 SEPARATE_FUNCTION_CALLS=True
+LOGLEVEL=1
 
 list_of_functions=[]
 myfile=None
@@ -49,7 +50,8 @@ def localtracer(frame, event, arg):
         if len(stack)>=2:
             diag.append( "    " + stack[-2][0] + " <-- " + stack[-1][0] + ";\n")
         del stack[-1]
-    print( "localtrace", event, filename, line, '::',  code)
+    if LOGLEVEL >2:
+        print( "localtrace", event, filename, line, '::',  code)
 
 def globaltrace(frame, event, arg):
     #print(event)
@@ -79,7 +81,8 @@ def globaltrace(frame, event, arg):
             else:
                 list_of_functions.append(classname + '_' +name)
 
-    print( "globaltrace", event, filename, line, classname, objectid, name, '::', code)
+    if LOGLEVEL >2:
+        print( "globaltrace", event, filename, line, classname, objectid, name, '::', code)
 
     if event=="call":
         if stack:
