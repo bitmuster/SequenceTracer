@@ -98,7 +98,10 @@ def globaltrace(frame, event, arg):
         if stack:
             diag.append( "    " + stack[-1][0] + " -> ")
             if SEPARATE_FUNCTION_CALLS and not "self" in frame.f_locals:
-                stack.append((classname + '_' +name, name))
+                if name == '<module>':
+                    stack.append((classname, name)) # E.g. Use None instead of None_<module>
+                else:
+                    stack.append((classname + '_' +name, name))
             else:
                 stack.append((classname, name))
 
