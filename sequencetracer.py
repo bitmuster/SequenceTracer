@@ -20,6 +20,12 @@ if True:
     import sample_code
     sys.path.append(scipt_path)
 
+# Experimental direct loader:
+# TODO: Does not work well as seqdiag3 exits hard after printing usage infos
+# and we yet cannot use command line parameters right
+#inputfilename = "/usr/bin/seqdiag3"
+#cmd = 'seqdiag3 -T svg sample.sdiag'
+#myargv= ['seqdiag3','-T','svg','sample.sdiag']
 
 
 
@@ -110,7 +116,11 @@ def main():
     diag=Diagram()
     sys.settrace(globaltrace)
 
+    # Simple exec:
     exec(cmd)
+    # Exec that loads and execute a file without the need of an import
+    # TODO: How to deal with command line parameters? Can we inject argv?
+    # exec(compile(open(inputfilename).read(), inputfilename, 'exec'))
 
     # disable tracing, otherwise we cannot close the file
     sys.settrace(None)
