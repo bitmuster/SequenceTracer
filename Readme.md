@@ -25,7 +25,7 @@ As debian packet: python3-seqdiag
 - Add license info
 - Any way to debug??? We cannot trace and debug at the same time!
   - Can we test this nicely ?
-- 
+- Separate diagram context e.g. generate one diagram per function/method
 
 
 
