@@ -127,5 +127,6 @@ def main():
 
     myfile.write("}\n")
     myfile.close()
+    print('Exiting Sequencetracer')
 
 main()
