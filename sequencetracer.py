@@ -3,6 +3,9 @@
 
 # This work was inspired by Zooko O'Whielacronx's trace.py
 
+# TODO: Decide about license
+# TODO: We still see arguments for sequencetracer appear on the analyzed script
+# TODO: Add filters to ignore calls, e.g. class IncrementalDecoder, inits etc.
 
 import sys
 import linecache
@@ -12,12 +15,14 @@ stack=[]
 FILENAME="output.sdiag"
 
 # Make functions appear as separated objects
-SEPARATE_FUNCTION_CALLS=True
+SEPARATE_FUNCTION_CALLS=False
 LOGLEVEL=1
 
 list_of_functions=[]
 myfile=None
 diag=None
+
+GLOBALS=globals()
 
 class Diagram:
     def __init__(self):
@@ -97,6 +102,8 @@ def main():
 
     inputfilename = sys.argv[1]
     print('Starting SequenceTracer for %s'%inputfilename)
+    print(GLOBALS)
+
     global diag
     diag=Diagram()
     sys.settrace(globaltrace)
@@ -126,6 +133,7 @@ def main():
     sys.settrace(None)
 
     global myfile
+    print('Writing diagram to %s'%FILENAME)
     myfile=open(FILENAME, 'w')
     myfile.write("seqdiag {\n")
     myfile.write("    edge_length = 140;\n")  # default value is 192
