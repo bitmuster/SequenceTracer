@@ -8,27 +8,6 @@ import sys
 import linecache
 import os, os.path
 
-if False:
-    scipt_path = "/home/micha/Dump/CodeLand/AnyMate"
-    cmd = "AnyMate.main( ['AnyMate.py', '--nogui', 'greet', '../AnyMate/template.anymate'] ) "
-    sys.path.append(scipt_path)
-    import AnyMate
-
-if True:
-    scipt_path = "./"
-    cmd = "sample_code.main()"
-    import sample_code
-    sys.path.append(scipt_path)
-
-# Experimental direct loader:
-# TODO: Does not work well as seqdiag3 exits hard after printing usage infos
-# and we yet cannot use command line parameters right
-#inputfilename = "/usr/bin/seqdiag3"
-#cmd = 'seqdiag3 -T svg sample.sdiag'
-#myargv= ['seqdiag3','-T','svg','sample.sdiag']
-
-
-
 stack=[]
 FILENAME="output.sdiag"
 
@@ -115,6 +94,9 @@ def globaltrace(frame, event, arg):
 
 
 def main():
+
+    inputfilename = sys.argv[1]
+    print('Starting SequenceTracer for %s'%inputfilename)
     global diag
     diag=Diagram()
     sys.settrace(globaltrace)
@@ -136,7 +118,9 @@ def main():
         '__cached__' : None,
     }
 
+    print('## Execution of %s starts ##'%os.path.basename(inputfilename))
     exec(code, myglobals, myglobals)
+    print('## Execution of %s has ended ##'%os.path.basename(inputfilename))
 
     # disable tracing, otherwise we cannot close the file
     sys.settrace(None)
@@ -157,6 +141,6 @@ def main():
 
     myfile.write("}\n")
     myfile.close()
-    print('Exiting Sequencetracer')
+    print('Exiting SequenceTracer')
 
 main()
