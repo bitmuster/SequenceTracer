@@ -120,10 +120,23 @@ def main():
     sys.settrace(globaltrace)
 
     # Simple exec:
-    exec(cmd)
+    # exec(cmd)
+
     # Exec that loads and execute a file without the need of an import
     # TODO: How to deal with command line parameters? Can we inject argv?
-    # exec(compile(open(inputfilename).read(), inputfilename, 'exec'))
+    code = compile(open(inputfilename).read(), inputfilename, 'exec')
+    base = os.path.basename(inputfilename)
+
+    # Create emulation of global symbol table for the script
+    # even now, argv and sys.path are taken from this script WTF
+    myglobals = {
+        '__file__' : base,
+        '__name__' : '__main__',
+        '__package__' : None,
+        '__cached__' : None,
+    }
+
+    exec(code, myglobals, myglobals)
 
     # disable tracing, otherwise we cannot close the file
     sys.settrace(None)
