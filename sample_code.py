@@ -1,5 +1,7 @@
 #! /usr/bin/python3
 
+import sys
+
 def alpha():
     print('alpha')
 
@@ -29,7 +31,7 @@ def main():
 
 alpha()
 
-print('Sample name', __name__)
+print('Sample name', __name__, 'argv: ', sys.argv)
 
 if __name__== "__main__":
     main()

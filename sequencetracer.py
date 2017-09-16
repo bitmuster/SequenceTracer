@@ -96,12 +96,29 @@ def globaltrace(frame, event, arg):
     #print(stack)
     return localtracer
 
+def abspath_impl(s):
+    print('Puke')
 
+def print_help():
+    print("the wrong help")
 
 def main():
 
     inputfilename = sys.argv[1]
+    startpath=os.getcwd()
     print('Starting SequenceTracer for %s'%inputfilename)
+
+    print( "file: %s" %__file__)
+    print( "name: %s" %__name__)
+    print( "package: %s" %__package__)
+    #print( "cached: %s" %__cached__) # Exists only when we debug it WTF
+    #print( "path: %s" %__path__)
+
+    print('* argv[0]                  :' + sys.argv[0])
+    print('* os.path.abspath(argv[0]) :' + os.path.abspath(sys.argv[0]))
+    print('* os.path.dirname(argv[0]) :' + os.path.dirname(sys.argv[0]))
+    print('* os.path.abspath(os.path.dirname(sys.argv[0])) :' + os.path.abspath(os.path.dirname(sys.argv[0])))
+
     print(GLOBALS)
 
     global diag
@@ -123,7 +140,19 @@ def main():
         '__name__' : '__main__',
         '__package__' : None,
         '__cached__' : None,
+        'sys' : sys
     }
+
+    print (myglobals)
+
+    # Set argv to the value our script will expect
+    sys.argv[0]=os.path.basename(inputfilename)
+    #del sys.argv[1]
+    del sys.argv[2]
+    sys.argv[1]='template.anymate'
+    sys.path[0] = os.path.dirname(inputfilename)
+
+    myglobals['sys'].abspath=abspath_impl
 
     print('## Execution of %s starts ##'%os.path.basename(inputfilename))
     exec(code, myglobals, myglobals)
@@ -131,6 +160,11 @@ def main():
 
     # disable tracing, otherwise we cannot close the file
     sys.settrace(None)
+
+    endpath=os.getcwd()
+    if startpath != endpath:
+        print( "The path was changed by the called script.", startpath, endpath)
+
 
     global myfile
     print('Writing diagram to %s'%FILENAME)

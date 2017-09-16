@@ -4,6 +4,8 @@
 
 Automatically enerate UML-Sequence diagrams from Python code traces.
 
+Sill in the state of a bad hack to demonstrate the concept!
+
 ## Requirements ##
 
 This project uses seqdiag a simple sequence-diagram image generator.
