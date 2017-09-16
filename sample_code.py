@@ -2,11 +2,9 @@
 
 def alpha():
     print('alpha')
-    pass
 
 def delta():
     print('delta')
-    pass
 
 class Beta:
     def __init__(self):
@@ -31,10 +29,7 @@ def main():
 
 alpha()
 
+print('Sample name', __name__)
+
 if __name__== "__main__":
-    # does not work as the name is sample_code when called from sequence tracer
-    main() 
-
-print('Name', __name__)
-main()
-
+    main()
