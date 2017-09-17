@@ -3,22 +3,22 @@
 
 # This work was inspired by Zooko O'Whielacronx's trace.py
 
-# See Readme.md about To-Dos
+# See Readme.md about usage and To-Dos
 
 import sys
 import linecache
 import os, os.path
 
-stack=[]
-FILENAME="output.sdiag"
+stack = []
+FILENAME = "output.sdiag"
 
 # Make functions appear as separated objects
-SEPARATE_FUNCTION_CALLS=False
-LOGLEVEL=1
+SEPARATE_FUNCTION_CALLS = False
+LOGLEVEL = 1
 
-list_of_functions=[]
-myfile=None
-diag=None
+list_of_functions = []
+myfile = None
+diag = None
 
 GLOBALS=globals()
 
