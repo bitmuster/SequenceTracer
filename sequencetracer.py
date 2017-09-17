@@ -113,7 +113,6 @@ def main():
 
     global diag
     diag=Diagram()
-    sys.settrace(globaltrace)
 
     # Simple exec:
     # exec(cmd)
@@ -154,11 +153,13 @@ def main():
     sys.path[0] = os.path.dirname(inputfilename)
 
     print('## Execution of %s starts ##'%os.path.basename(inputfilename))
+    # start tracing
+    sys.settrace(globaltrace)
     exec(code, myglobals, myglobals)
+    # disable tracing
+    sys.settrace(None)
     print('## Execution of %s has ended ##'%os.path.basename(inputfilename))
 
-    # disable tracing, otherwise we cannot close the file
-    sys.settrace(None)
 
     # Restore path values from backup
     sys.argv = argv_orig
