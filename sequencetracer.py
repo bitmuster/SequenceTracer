@@ -3,9 +3,7 @@
 
 # This work was inspired by Zooko O'Whielacronx's trace.py
 
-# TODO: Decide about license
-# TODO: We still see arguments for sequencetracer appear on the analyzed script
-# TODO: Add filters to ignore calls, e.g. class IncrementalDecoder, inits etc.
+# See Readme.md about To-Dos
 
 import sys
 import linecache
