@@ -130,7 +130,6 @@ def main():
         '__name__' : '__main__',
         '__package__' : None,
         '__cached__' : None,
-        'sys' : sys
     }
 
     print (myglobals)
@@ -150,8 +149,6 @@ def main():
     # Set sys.path to the directory where inputile is. Same as when we call
     # it ourself
     sys.path[0] = os.path.dirname(inputfilename)
-
-    myglobals['sys'].abspath=abspath_impl
 
     print('## Execution of %s starts ##'%os.path.basename(inputfilename))
     exec(code, myglobals, myglobals)
