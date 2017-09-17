@@ -13,6 +13,7 @@ FILENAME = "output.sdiag"
 
 # Make functions appear as separated objects
 SEPARATE_FUNCTION_CALLS = True
+SEPARATE_FUNCTION_CALLS_SORTED = False
 LOGLEVEL = 1
 
 class Diagram:
@@ -30,9 +31,14 @@ class Diagram:
 
     def filter_find_and_load(self):
         # filters depends on if we separate function calls
-        filter_begin = """    None -> None [label = "_find_and_load"];"""
+        if SEPARATE_FUNCTION_CALLS:
+            filter_begin = """    None -> None__find_and_load [label = "_find_and_load"];\n"""
+            filter_end =   """    None <-- None__find_and_load;\n"""
+        else:
+            filter_begin = """    None -> None [label = "_find_and_load"];"""
+            filter_end =   """    None <-- None;"""
+
         filter_begin_depth=0
-        filter_end = """    None <-- None;"""
         newcontent = []
         filter_active = False
         for entry in self.content:
@@ -111,7 +117,9 @@ class SequenceTracer:
         else:
             classname='None'
             if SEPARATE_FUNCTION_CALLS:
-                if name == '<module>': # wtf
+                if name == '<module>' \
+                    or name=='<genexpr>' \
+                    or name=='<listcomp>':
                     self.list_of_functions.append(classname)
                 else:
                     self.list_of_functions.append(classname + '_' +name)
@@ -128,9 +136,9 @@ class SequenceTracer:
                 if self.call_depth > self.call_depth_max:
                     self.call_depth_max = self.call_depth
                 if SEPARATE_FUNCTION_CALLS and not "self" in frame.f_locals:
-                    if name == '<module>' :
-                    #or name=='<genexpr>' \
-                    #or name=='<listcomp>':
+                    if name == '<module>' \
+                    or name=='<genexpr>' \
+                    or name=='<listcomp>':
                         # E.g. Use None instead of "None_<module>"
                         self.stack.append((classname, name))
                     else:
@@ -226,7 +234,7 @@ class SequenceTracer:
         myfile.write("    edge_length = 140;\n")  # default value is 192
         myfile.write("    span_height = 5;\n")  # default value is 40
 
-        if SEPARATE_FUNCTION_CALLS:
+        if SEPARATE_FUNCTION_CALLS_SORTED:
             myfile.write('    ')
             for function in self.list_of_functions:
                 myfile.write(function+';')
