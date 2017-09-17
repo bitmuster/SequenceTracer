@@ -137,6 +137,7 @@ def main():
     # Make some backup copies
     argv_orig = sys.argv[:]
     path_orig = sys.path[:]
+    cwd_orig = os.getcwd()
 
     # Set argv to the value our script will expect
     # argv0 will be the filename. However, when we call it from somewhere else
@@ -160,6 +161,7 @@ def main():
     # Restore path values from backup
     sys.argv = argv_orig
     sys.path = path_orig
+    os.chdir(cwd_orig)
 
     endpath=os.getcwd()
     if startpath != endpath:
