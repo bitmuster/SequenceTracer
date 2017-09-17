@@ -94,9 +94,6 @@ def globaltrace(frame, event, arg):
     #print(stack)
     return localtracer
 
-def abspath_impl(s):
-    print('Puke')
-
 def print_help():
     print("the wrong help")
 
@@ -111,11 +108,6 @@ def main():
     print( "package: %s" %__package__)
     #print( "cached: %s" %__cached__) # Exists only when we debug it WTF
     #print( "path: %s" %__path__)
-
-    print('* argv[0]                  :' + sys.argv[0])
-    print('* os.path.abspath(argv[0]) :' + os.path.abspath(sys.argv[0]))
-    print('* os.path.dirname(argv[0]) :' + os.path.dirname(sys.argv[0]))
-    print('* os.path.abspath(os.path.dirname(sys.argv[0])) :' + os.path.abspath(os.path.dirname(sys.argv[0])))
 
     print(GLOBALS)
 
@@ -143,11 +135,20 @@ def main():
 
     print (myglobals)
 
+    # Make some backup copies
+    argv_orig = sys.argv[:]
+    path_orig = sys.path[:]
+
     # Set argv to the value our script will expect
-    sys.argv[0]=os.path.basename(inputfilename)
+    # argv0 will be the filename. However, when we call it from somewhere else
+    # it will contain a path to the script.
+    sys.argv[0]=inputfilename # has to be a relative path
+    sys.argv[1]= sys.argv[2]
     #del sys.argv[1]
     del sys.argv[2]
-    sys.argv[1]='template.anymate'
+
+    # Set sys.path to the directory where inputile is. Same as when we call
+    # it ourself
     sys.path[0] = os.path.dirname(inputfilename)
 
     myglobals['sys'].abspath=abspath_impl
@@ -158,6 +159,10 @@ def main():
 
     # disable tracing, otherwise we cannot close the file
     sys.settrace(None)
+
+    # Restore path values from backup
+    sys.argv = argv_orig
+    sys.path = path_orig
 
     endpath=os.getcwd()
     if startpath != endpath:
