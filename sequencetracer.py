@@ -101,9 +101,9 @@ def globaltrace(frame, event, arg):
 def print_help():
     print("the wrong help")
 
-def main():
+def main(argv):
 
-    inputfilename = sys.argv[1]
+    inputfilename = argv[1]
     startpath=os.getcwd()
     print('Starting SequenceTracer for %s'%inputfilename)
 
@@ -136,19 +136,19 @@ def main():
     #print (myglobals)
 
     # Make some backup copies
-    argv_orig = sys.argv[:]
+    argv_orig = argv[:]
     path_orig = sys.path[:]
     cwd_orig = os.getcwd()
 
-    # Set argv to the value our script will expect
+    # Set sys.argv to the value our script will expect
     # argv0 will be the filename. However, when we call it from somewhere else
     # it will contain a path to the script.
     sys.argv[0]=inputfilename # has to be a relative path
-    for arg in range(1, len(sys.argv)-1):
-        sys.argv[arg]= sys.argv[arg+1]
+    for arg in range(1, len(argv)-1):
+        sys.argv[arg]= argv[arg+1]
     del sys.argv[-1]
 
-    print('Prepared new sys.argv', sys.argv)
+    print('Prepared new argv', argv)
 
     # Set sys.path to the directory where inputile is. Same as when we call
     # it ourself
@@ -164,7 +164,7 @@ def main():
 
 
     # Restore path values from backup
-    sys.argv = argv_orig
+    argv = argv_orig
     sys.path = path_orig
     os.chdir(cwd_orig)
 
@@ -195,4 +195,5 @@ def main():
     myfile.close()
     print('Exiting SequenceTracer')
 
-main()
+if __name__ == '__main__':
+    main(sys.argv)
