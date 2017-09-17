@@ -33,5 +33,7 @@ As debian packet: python3-seqdiag
 - Decide about license
 - We still see arguments for sequencetracer appear on the analyzed script
 - Add filters to ignore calls, e.g. class IncrementalDecoder, inits etc.
+- Why are there so many other call since we switched from imported modules
+    to compiled code?
 
 

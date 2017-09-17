@@ -87,7 +87,7 @@ def globaltrace(frame, event, arg):
         global call_depth_max
         recorded_calls += 1
         if stack:
-            diag.append( "    " + " "*call_depth + stack[-1][0] + " -> ")
+            line_begin= "    " + " "*call_depth + stack[-1][0] + " -> "
             call_depth += 1
             if call_depth > call_depth_max:
                 call_depth_max = call_depth
@@ -99,7 +99,8 @@ def globaltrace(frame, event, arg):
             else:
                 stack.append((classname, name))
 
-            diag.append( stack[-1][0] + " [label = \"" +stack[-1][1] + "\"];\n")
+            line_end = stack[-1][0] + " [label = \"" +stack[-1][1] + "\"];\n"
+            diag.append(line_begin+line_end)
         else:
             stack.append((classname,name))
 
@@ -152,10 +153,10 @@ def main(argv):
     # Set sys.argv to the value our script will expect
     # argv0 will be the filename. However, when we call it from somewhere else
     # it will contain a path to the script.
-    sys.argv[0]=inputfilename # has to be a relative path
+    sys.argv=[]
+    sys.argv.append(inputfilename) # has to be a relative path
     for arg in range(1, len(argv)-1):
-        sys.argv[arg]= argv[arg+1]
-    del sys.argv[-1]
+        sys.argv.append(argv[arg+1])
 
     print('Prepared new argv', argv)
 
@@ -198,8 +199,10 @@ def main(argv):
             myfile.write(function+';')
         myfile.write('\n')
 
-    for c in diag.getcontent():
-        myfile.write(c)
+    for content in diag.getcontent():
+        # the first filter
+        if 'Class_EncodedFile' not in content:
+            myfile.write(content)
 
     myfile.write("}\n")
     myfile.close()
