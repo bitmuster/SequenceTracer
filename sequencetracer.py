@@ -1,9 +1,10 @@
 #! /usr/bin/python3
-
-
-# This work was inspired by Zooko O'Whielacronx's trace.py
-
+#
+# UML Sequence Diagram Tracer
+# Author: Michael Abel, 2017
+# License: GPL
 # See Readme.md about usage and To-Dos
+# This work was inspired by Zooko O'Whielacronx's trace.py
 
 import sys
 import linecache
