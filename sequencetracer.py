@@ -184,6 +184,7 @@ def main():
     myfile.write("    span_height = 5;\n")  # default value is 40
 
     if SEPARATE_FUNCTION_CALLS:
+        myfile.write('    ')
         for function in list_of_functions:
             myfile.write(function+';')
         myfile.write('\n')
