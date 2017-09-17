@@ -25,6 +25,41 @@ class Diagram:
     def getcontent(self):
         return self.content
 
+    def get_call_depth(self, line):
+        return len(line) - len(line.lstrip()) - 4
+
+    def filter_find_and_load(self):
+        # filters depends on if we separate function calls
+        filter_begin = """    None -> None [label = "_find_and_load"];"""
+        filter_begin_depth=0
+        filter_end = """    None <-- None;"""
+        newcontent = []
+        filter_active = False
+        for entry in self.content:
+            if entry == filter_begin:
+                filter_active = True
+                filter_begin_depth= self.get_call_depth(entry)
+            elif entry == filter_end \
+                    and (self.get_call_depth(entry) == filter_begin_depth):
+                if not filter_active:
+                    raise SystemError("Filter error, already disabled")
+                filter_active = False
+            else:
+                if not filter_active:
+                    newcontent.append(entry)
+        self.content=newcontent
+
+    def filter_encoded(self):
+        newcontent = []
+        for entry in self.content:
+            if not ("Class_EncodedFile" in entry):
+                newcontent.append(entry)
+        self.content=newcontent
+
+    def filter_all(self):
+        self.filter_find_and_load()
+        self.filter_encoded()
+
 class SequenceTracer:
     def __init__(self, argv):
 
@@ -93,7 +128,9 @@ class SequenceTracer:
                 if self.call_depth > self.call_depth_max:
                     self.call_depth_max = self.call_depth
                 if SEPARATE_FUNCTION_CALLS and not "self" in frame.f_locals:
-                    if name == '<module>':
+                    if name == '<module>' :
+                    #or name=='<genexpr>' \
+                    #or name=='<listcomp>':
                         # E.g. Use None instead of "None_<module>"
                         self.stack.append((classname, name))
                     else:
@@ -181,6 +218,8 @@ class SequenceTracer:
         print('Recorded %i method/function calls'%self.recorded_calls)
         print('Maximal call depth is %i'%self.call_depth_max)
 
+        self.diag.filter_all()
+
         print('Writing diagram to %s'%FILENAME)
         myfile=open(FILENAME, 'w')
         myfile.write("seqdiag {\n")
@@ -195,8 +234,7 @@ class SequenceTracer:
 
         for content in self.diag.getcontent():
             # the first filter
-            if 'Class_EncodedFile' not in content:
-                myfile.write(content)
+            myfile.write(content)
 
         myfile.write("}\n")
         myfile.close()
