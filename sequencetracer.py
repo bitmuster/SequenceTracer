@@ -13,7 +13,7 @@ stack = []
 FILENAME = "output.sdiag"
 
 # Make functions appear as separated objects
-SEPARATE_FUNCTION_CALLS = False
+SEPARATE_FUNCTION_CALLS = True
 LOGLEVEL = 1
 
 list_of_functions = []

@@ -1,6 +1,5 @@
 
-expected_diagram="""
-seqdiag {
+expected_diagram="""seqdiag {
     edge_length = 140;
     span_height = 5;
     None;None_do_stuff;None_do_more_stuff;
