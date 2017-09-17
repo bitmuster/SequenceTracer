@@ -113,6 +113,22 @@ def print_help():
 
 def main(argv):
 
+    # penalty for starting with globals
+    global diag
+    global list_of_functions
+    global stack
+    global recorded_calls
+    global call_depth
+    global call_depth_max
+    global myfile
+
+    stack = []
+    diag = None
+    list_of_functions=[]
+    recorded_calls=0
+    call_depth=0
+    call_depth_max=0
+
     inputfilename = argv[1]
     startpath=os.getcwd()
     print('Starting SequenceTracer for %s'%inputfilename)
@@ -124,7 +140,6 @@ def main(argv):
 
     #print(GLOBALS)
 
-    global diag
     diag=Diagram()
 
     # TODO: Add oportunity to do this as well
@@ -182,11 +197,9 @@ def main(argv):
     if startpath != endpath:
         print( "The path was changed by the called script.", startpath, endpath)
 
-    global recorded_calls
     print('Recorded %i method/function calls'%recorded_calls)
     print('Maximal call depth is %i'%call_depth_max)
 
-    global myfile
     print('Writing diagram to %s'%FILENAME)
     myfile=open(FILENAME, 'w')
     myfile.write("seqdiag {\n")
