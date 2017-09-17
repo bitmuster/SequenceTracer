@@ -35,34 +35,42 @@ class Diagram:
         return self.content
 
     def get_call_depth(self, line):
-        return len(line) - len(line.lstrip()) - 4
+        return len(line) - len(line.lstrip()) - 4 # still not very nice
 
     def filter_find_and_load(self):
-
-
-        filter_begin_depth=0
+        filtered = 0
+        filter_begin_depth = 0
         newcontent = []
         filter_active = False
         for entry in self.content:
             if entry == FILTER_BEGIN:
                 filter_active = True
                 filter_begin_depth= self.get_call_depth(entry)
+                filtered += 1
             elif entry == FILTER_END \
                     and (self.get_call_depth(entry) == filter_begin_depth):
                 if not filter_active:
                     raise SystemError("Filter error, already disabled")
                 filter_active = False
+                filtered += 1
             else:
                 if not filter_active:
                     newcontent.append(entry)
+                else:
+                    filtered += 1
         self.content=newcontent
+        print("Filtered %i entries"%filtered)
 
     def filter_encoded(self):
+        filtered=0
         newcontent = []
         for entry in self.content:
             if not ("Class_EncodedFile" in entry):
                 newcontent.append(entry)
+            else:
+                filtered += 1
         self.content=newcontent
+        print("Filtered %i entries"%filtered)
 
     def filter_all(self):
         self.filter_find_and_load()
