@@ -19,6 +19,7 @@ LOGLEVEL = 1
 list_of_functions = []
 myfile = None
 diag = None
+recorded_calls=0
 
 GLOBALS=globals()
 
@@ -77,6 +78,8 @@ def globaltrace(frame, event, arg):
         print( "globaltrace", event, filename, line, classname, objectid, name, '::', code)
 
     if event=="call":
+        global recorded_calls
+        recorded_calls += 1
         if stack:
             diag.append( "    " + stack[-1][0] + " -> ")
             if SEPARATE_FUNCTION_CALLS and not "self" in frame.f_locals:
@@ -170,6 +173,8 @@ def main():
     if startpath != endpath:
         print( "The path was changed by the called script.", startpath, endpath)
 
+    global recorded_calls
+    print('Recorded %i method/function calls'%recorded_calls)
 
     global myfile
     print('Writing diagram to %s'%FILENAME)
