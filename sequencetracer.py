@@ -94,7 +94,8 @@ def globaltrace(frame, event, arg):
         else:
             stack.append((classname,name))
 
-    #print(stack)
+    if LOGLEVEL>3:
+        print(stack)
     return localtracer
 
 def print_help():
@@ -106,27 +107,25 @@ def main():
     startpath=os.getcwd()
     print('Starting SequenceTracer for %s'%inputfilename)
 
-    print( "file: %s" %__file__)
-    print( "name: %s" %__name__)
-    print( "package: %s" %__package__)
-    #print( "cached: %s" %__cached__) # Exists only when we debug it WTF
-    #print( "path: %s" %__path__)
+    # print( "file: %s" %__file__)
+    # print( "name: %s" %__name__)
+    # print( "package: %s" %__package__)
 
-    print(GLOBALS)
+
+    #print(GLOBALS)
 
     global diag
     diag=Diagram()
 
-    # Simple exec:
+    # TODO: Add oportunity to do this as well
+    # Simple exec
     # exec(cmd)
 
     # Exec that loads and execute a file without the need of an import
-    # TODO: How to deal with command line parameters? Can we inject argv?
     code = compile(open(inputfilename).read(), inputfilename, 'exec')
     base = os.path.basename(inputfilename)
 
     # Create emulation of global symbol table for the script
-    # even now, argv and sys.path are taken from this script WTF
     myglobals = {
         '__file__' : base,
         '__name__' : '__main__',
@@ -134,7 +133,7 @@ def main():
         '__cached__' : None,
     }
 
-    print (myglobals)
+    #print (myglobals)
 
     # Make some backup copies
     argv_orig = sys.argv[:]
