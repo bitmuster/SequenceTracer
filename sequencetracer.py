@@ -143,9 +143,11 @@ def main():
     # argv0 will be the filename. However, when we call it from somewhere else
     # it will contain a path to the script.
     sys.argv[0]=inputfilename # has to be a relative path
-    sys.argv[1]= sys.argv[2]
-    #del sys.argv[1]
-    del sys.argv[2]
+    for arg in range(1, len(sys.argv)-1):
+        sys.argv[arg]= sys.argv[arg+1]
+    del sys.argv[-1]
+
+    print('Prepared new sys.argv', sys.argv)
 
     # Set sys.path to the directory where inputile is. Same as when we call
     # it ourself
