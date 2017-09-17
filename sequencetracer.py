@@ -20,6 +20,8 @@ list_of_functions = []
 myfile = None
 diag = None
 recorded_calls=0
+call_depth=0
+call_depth_max=0
 
 GLOBALS=globals()
 
@@ -36,12 +38,14 @@ class Diagram:
 def localtracer(frame, event, arg):
     #print (event)
     #print (type(frame))
+    global call_depth
     line=frame.f_lineno
     filename = os.path.basename( frame.f_code.co_filename )
     code=linecache.getline(filename, line)
     if event == "return":
+        call_depth -=1
         if len(stack)>=2:
-            diag.append( "    " + stack[-2][0] + " <-- " + stack[-1][0] + ";\n")
+            diag.append( "    "+ " "*call_depth + stack[-2][0] + " <-- " + stack[-1][0] + ";\n")
         del stack[-1]
     if LOGLEVEL >2:
         print( "localtrace", event, filename, line, '::',  code)
@@ -79,9 +83,14 @@ def globaltrace(frame, event, arg):
 
     if event=="call":
         global recorded_calls
+        global call_depth
+        global call_depth_max
         recorded_calls += 1
         if stack:
-            diag.append( "    " + stack[-1][0] + " -> ")
+            diag.append( "    " + " "*call_depth + stack[-1][0] + " -> ")
+            call_depth += 1
+            if call_depth > call_depth_max:
+                call_depth_max = call_depth
             if SEPARATE_FUNCTION_CALLS and not "self" in frame.f_locals:
                 if name == '<module>':
                     stack.append((classname, name)) # E.g. Use None instead of None_<module>
@@ -174,6 +183,7 @@ def main(argv):
 
     global recorded_calls
     print('Recorded %i method/function calls'%recorded_calls)
+    print('Maximal call depth is %i'%call_depth_max)
 
     global myfile
     print('Writing diagram to %s'%FILENAME)

@@ -4,8 +4,8 @@ expected_diagram="""seqdiag {
     span_height = 5;
     None;None_do_stuff;None_do_more_stuff;
     None -> None_do_stuff [label = "do_stuff"];
-    None_do_stuff -> None_do_more_stuff [label = "do_more_stuff"];
-    None_do_stuff <-- None_do_more_stuff;
+     None_do_stuff -> None_do_more_stuff [label = "do_more_stuff"];
+     None_do_stuff <-- None_do_more_stuff;
     None <-- None_do_stuff;
 }
 """
