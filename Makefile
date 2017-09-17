@@ -8,3 +8,6 @@ sample:
 
 test:
 	python3 sequencetracer.py tests/global_symbols.py Laserpony
+
+pytest:
+	pytest-3
