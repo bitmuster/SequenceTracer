@@ -16,6 +16,14 @@ SEPARATE_FUNCTION_CALLS = True
 SEPARATE_FUNCTION_CALLS_SORTED = False
 LOGLEVEL = 1
 
+# filters depends on if we separate function calls
+if SEPARATE_FUNCTION_CALLS:
+    FILTER_BEGIN = """    None -> None__find_and_load [label = "_find_and_load"];\n"""
+    FILTER_END =   """    None <-- None__find_and_load;\n"""
+else:
+    FILTER_BEGIN = """    None -> None [label = "_find_and_load"];"""
+    FILTER_END =   """    None <-- None;"""
+
 class Diagram:
     def __init__(self):
         self.content=[]
@@ -30,22 +38,16 @@ class Diagram:
         return len(line) - len(line.lstrip()) - 4
 
     def filter_find_and_load(self):
-        # filters depends on if we separate function calls
-        if SEPARATE_FUNCTION_CALLS:
-            filter_begin = """    None -> None__find_and_load [label = "_find_and_load"];\n"""
-            filter_end =   """    None <-- None__find_and_load;\n"""
-        else:
-            filter_begin = """    None -> None [label = "_find_and_load"];"""
-            filter_end =   """    None <-- None;"""
+
 
         filter_begin_depth=0
         newcontent = []
         filter_active = False
         for entry in self.content:
-            if entry == filter_begin:
+            if entry == FILTER_BEGIN:
                 filter_active = True
                 filter_begin_depth= self.get_call_depth(entry)
-            elif entry == filter_end \
+            elif entry == FILTER_END \
                     and (self.get_call_depth(entry) == filter_begin_depth):
                 if not filter_active:
                     raise SystemError("Filter error, already disabled")

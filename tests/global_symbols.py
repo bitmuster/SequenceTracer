@@ -5,7 +5,6 @@ import os
 expected_diagram="""seqdiag {
     edge_length = 140;
     span_height = 5;
-    None;None_print_stuff;None_dirname;None__get_sep;None_abspath;None_isabs;None__get_sep;None_join;None__get_sep;None_normpath;None_abspath;None_isabs;None__get_sep;None_join;None__get_sep;None_normpath;None_dirname;None__get_sep;
     None -> None_print_stuff [label = "print_stuff"];
      None_print_stuff -> None_dirname [label = "dirname"];
       None_dirname -> None__get_sep [label = "_get_sep"];

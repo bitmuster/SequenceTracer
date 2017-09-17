@@ -2,17 +2,17 @@
 import sys
 import unittest
 sys.path.append('./')
-from sequencetracer import Diagram
+from sequencetracer import Diagram, FILTER_END, FILTER_BEGIN
 
 
 d1=[
 """seqdiag {""",
 """    edge_length = 140;""",
 """    span_height = 5;""",
-"""    None -> None [label = "_find_and_load"];""",
+FILTER_BEGIN,
 """     Non""",
 """     Fini""",
-"""    None <-- None;""",
+FILTER_END,
 """}""",
 """"""
 ]
@@ -29,12 +29,12 @@ d2=[
 """seqdiag {""",
 """    edge_length = 140;""",
 """    span_height = 5;""",
-"""    None -> None [label = "_find_and_load"];""",
+FILTER_BEGIN,
 """     None -> None [label = "print_stuff"];""",
 """      Non""",
 """      Fini""",
 """     None <-- None;""",
-"""    None <-- None;""",
+FILTER_END,
 """}""",
 """"""
 ]
