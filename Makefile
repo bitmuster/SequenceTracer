@@ -29,6 +29,9 @@ view:
 
 test:
 	python3 sequencetracer.py tests/global_symbols.py Laserpony
+	seqdiag3 -T svg output.sdiag
+	seqdiag3 -T png output.sdiag
+	eom output.png
 
 pytest:
 	pytest-3
